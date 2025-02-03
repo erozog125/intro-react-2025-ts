@@ -1,18 +1,23 @@
 import { useState } from 'react'
 import './App.css'
-import { Button } from './Components'
+import { Button, RickAndMorty } from './Components'
 
 export const App = () => {
 
-  const [newText, setNewText] = useState('Este es mi primer curso de React')
+  type user = {
+    username: string;
+    age?: number;
+  }
+  const [newText, setNewText] = useState<user>({username: 'Edwin'})
 
   const handleClick = () => {
-    setNewText('Ejecuntando el evento onClick')
+    setNewText({username: 'Rozo'})
   }
 
   return (
     <>
-      <h1>{newText}</h1>
+      <h1>{newText.username}</h1>
+      <RickAndMorty />
       <Button text='Hello' parentMethod={handleClick} />    
     </>
   )
