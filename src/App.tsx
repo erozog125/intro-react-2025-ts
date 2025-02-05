@@ -17,8 +17,8 @@ export const App = () => {
   return (
     <>
       <h1>{newText.username}</h1>
+      <Button text='Hello' parentMethod={handleClick} />    
       <RickAndMorty />
-      {/* <Button text='Hello' parentMethod={handleClick} />     */}
     </>
   )
 }
