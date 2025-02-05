@@ -37,7 +37,7 @@ export const useFetch = <T,>(url: string): Params<T> => {
       }
     }
 
-    fetchData()
+    setTimeout(() => {fetchData()}, 4000)
 
     return () => {    
       controller.abort()
