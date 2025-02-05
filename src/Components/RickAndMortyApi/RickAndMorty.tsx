@@ -1,47 +1,18 @@
-import { useState, useEffect } from 'react';
-
-// URL de la API
-const URL: string = 'https://rickandmortyapi.com/api/character/';
+import { useFetch } from '../../hooks/useFetch'
 
 // Interfaz para los personajes
 interface Character {
-  id: number;
-  name: string;
-  image: string;
+  id: number
+  name: string
+  image: string
 }
+// URL de la API
+const URL: string = 'https://rickandmortyapi.com/api/character/'
 
 export const RickAndMorty = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // Definimos la función fetchCharacters fuera del useEffect
-  const fetchCharacters = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(URL);
-      if (!response.ok) {
-        throw new Error('Failed to fetch characters');
-      }
-      const data = await response.json();
-      setCharacters(data.results);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Simulamos un retraso de 5 segundos antes de hacer la petición
-    const timer = setTimeout(() => {
-      fetchCharacters(); // Llamamos la función manualmente
-    }, 5000);
-
-    // Limpiamos el timeout si el componente se desmonta antes de que termine
-    return () => clearTimeout(timer);
-  }, []); // Solo se ejecuta una vez al montar el componente
-
+  const { data, error, loading } = useFetch<{ results: Character[] }>(URL)
+  
   return (
     <div>
       <h1>Rick and Morty Character Gallery</h1>
@@ -54,8 +25,8 @@ export const RickAndMorty = () => {
 
       {/* Mostramos los personajes solo si no estamos cargando y no hay errores */}
       {!loading && !error && (
-        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {characters.map((character) => (
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>                    
+          {data?.results.map((character) => (
             <div key={character.id} style={{ margin: '10px' }}>
               <img
                 src={character.image}
@@ -66,12 +37,7 @@ export const RickAndMorty = () => {
             </div>
           ))}
         </div>
-      )}
-
-      {/* Botón para recargar manualmente los datos */}
-      <button className='btnLoader' onClick={fetchCharacters} disabled={loading}>
-        {loading ? 'Loading...' : 'Reload Characters'}
-      </button>
+      )}      
     </div>
-  );
-};
+  )
+}
